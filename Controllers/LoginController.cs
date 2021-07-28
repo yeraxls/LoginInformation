@@ -33,9 +33,9 @@ namespace LoginInformation.Controllers
         
         [HttpPost]
         [Route("logout")]
-        public bool Logout([FromBody] SoloIdModel userId)
+        public void Logout([FromBody] SoloIdModel userId)
         {
-            return _loginService.Logout(userId);
+            _loginService.Logout(userId);
         }
 
         [HttpPost]

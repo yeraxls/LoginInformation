@@ -1,4 +1,5 @@
 ﻿using LoginInformation.Models;
+using LoginInformation.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,20 @@ namespace LoginInformation.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly UserRepository userRepository;
+        public LoginService()
+        {
+            userRepository = UserRepository.GetInstance();
+        }
         public LoginResponseModel Login(LoginRequestModel login)
         {
-
-            return new LoginResponseModel { Date = DateTime.Now };
+            var user = userRepository.Login(login);
+            if (user.Valid) userRepository.UpdateConectionUser(user.Id, 1);
+            return user;
         }
-        public bool Logout(SoloIdModel userId)
+        public void Logout(SoloIdModel userId)
         {
-            return true;
+            userRepository.UpdateConectionUser(userId.Id, 0);
         }
         public string ForgotPassword(string mail)
         {
